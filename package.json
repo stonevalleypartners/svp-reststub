@@ -1,0 +1,19 @@
+{
+  "name": "svp-reststub",
+  "version": "0.0.1",
+  "description": "",
+  "main": "Stub.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alex Linden Levy",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^2.9.27",
+    "body-parser": "^1.12.4",
+    "express": "^4.12.4",
+    "express-bunyan-logger": "^1.1.1",
+    "http": "0.0.0",
+    "lodash": "^3.9.3"
+  }
+}
