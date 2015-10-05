@@ -1,8 +1,8 @@
 var express = require('express');
 var http = require('http');
 var lodash = require('lodash');
-var Promise = require('bluebird');
 var bodyParser = require('body-parser');
+var portFinder = require('svp-portfinder');
 
 function Stub(log){
   this.log = log;
@@ -17,13 +17,20 @@ function Stub(log){
   this.routes = {};
 };
 
-Stub.prototype.start = function(port){
-  var self = this;
-  return new Promise( function(resolve) {
-    self.server.listen(port);
-    self.server.on('listening', function() {
-      self.log.info('Stub listening on '+port);
-      resolve();
+Stub.prototype.start = function(_port){
+  return _port ? Promise.resolve(_port) : portFinder()
+    .then((port) => {
+      return new Promise((resolve, reject) => {
+        this.server.listen(port);
+        this.server.on('listening', () => {
+          this.log.info('Stub listening on '+port);
+          var url = 'http://localhost:' + port;
+          resolve(url);
+        });
+        this.server.on('error', (e) => {
+          this.log.info({err: e.message}, 'Stub error');
+          reject(e);
+        });
     });
   });
 };
@@ -34,7 +41,13 @@ Stub.prototype.addRoute = function(name,path, fun){
     if ( ! self.routes[name] ) self.routes[name]=[];
     self.log.info({routes: self.routes, path: path});
     self.router.all(path, function(req,res,next) {
-      self.routes[name].push({method: req.method, params: req.params, body: req.body});
+      var call = {
+        method: req.method,
+        params: req.params,
+        body: req.body,
+        query: req.query,
+      };
+      self.routes[name].push(call);
       if ( fun ) fun(req,res);
       else res.status(200).json({name: 'rest stub route:'+name});
     });
