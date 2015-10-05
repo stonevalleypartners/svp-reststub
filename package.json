@@ -2,9 +2,15 @@
   "name": "svp-reststub",
   "version": "0.0.1",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stonevalleypartners/svp-reststub",
+    "version": "1.0.0"
+  },
   "main": "Stub.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest": "jshint .",
+    "test": "istanbul cover node_modules/.bin/_mocha -- -R spec test"
   },
   "author": "Alex Linden Levy",
   "license": "ISC",
@@ -20,6 +26,9 @@
     "bunyan": "^1.5.1",
     "chai": "^3.3.0",
     "chai-as-promised": "^5.1.0",
+    "istanbul": "^0.3.22",
+    "jshint": "^2.8.0",
+    "mocha": "^2.3.3",
     "request-promise": "^0.4.3"
   }
 }
