@@ -10,7 +10,7 @@ function Stub(log){
     logger: this.log
   }));
   this.app.use(bodyParser.json())
-  this.server = http.Server(this.app);
+  this.server = http.createServer(this.app);
   this.router = express.Router();
   this.app.use(this.router);
   this.routes = {};
