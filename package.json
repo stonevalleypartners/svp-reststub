@@ -9,11 +9,17 @@
   "author": "Alex Linden Levy",
   "license": "ISC",
   "dependencies": {
-    "bluebird": "^2.9.27",
     "body-parser": "^1.12.4",
     "express": "^4.12.4",
     "express-bunyan-logger": "^1.1.1",
     "http": "0.0.0",
-    "lodash": "^3.9.3"
+    "lodash": "^3.9.3",
+    "svp-portfinder": "git+ssh://git@github.com/stonevalleypartners/svp-portfinder.git"
+  },
+  "devDependencies": {
+    "bunyan": "^1.5.1",
+    "chai": "^3.3.0",
+    "chai-as-promised": "^5.1.0",
+    "request-promise": "^0.4.3"
   }
 }
