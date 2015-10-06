@@ -97,6 +97,57 @@ describe('Stub', () => {
       });
   });
 
+  it('add response', () => {
+    return stub.setResponse('resp', '/response', {foo: 456});
+  });
+
+  it('call for response', () => {
+    return request(stubUrl + '/response')
+      .then((retval) => {
+        log.debug({stub: stub.routes, retval: retval}, 'look correct? (call response)');
+        JSON.parse(retval).foo.should.equal(456);
+        //obj.foo.should.equal(456);
+        var testObj = stub.routes.resp;
+        testObj.should.be.an('array').of.length(1);
+      });
+  });
+
+  it('call for response 2nd time', () => {
+    return request(stubUrl + '/response')
+      .then((retval) => {
+        log.debug({stub: stub.routes, retval: retval}, 'look correct? (call response)');
+        JSON.parse(retval).foo.should.equal(456);
+        var testObj = stub.routes.resp;
+        testObj.should.be.an('array').of.length(2);
+      });
+  });
+
+  it('change response', () => {
+    return stub.setResponse('resp', '/response', {foo: 789});
+  });
+
+  it('call for response 3rd time', () => {
+    return request(stubUrl + '/response')
+      .then((retval) => {
+        log.debug({stub: stub.routes, retval: retval}, 'look correct? (call response)');
+        JSON.parse(retval).foo.should.equal(789);
+        var testObj = stub.routes.resp;
+        testObj.should.be.an('array').of.length(3);
+      });
+  });
+
+  it('change to error response', () => {
+    return stub.setResponse('resp', '/response', {error: 'this is a test server'}, 501);
+  });
+
+  it('call for response - get error', () => {
+    return request({uri: stubUrl + '/response', simple: false, resolveWithFullResponse: true})
+      .then((response) => {
+        response.statusCode.should.equal(501);
+        JSON.parse(response.body).error.should.equal('this is a test server');
+      });
+  });
+
   it('call w/o handler', () => {
     return request(stubUrl + '/nohandler')
       .catch((reason) => {
@@ -104,9 +155,36 @@ describe('Stub', () => {
       });
   });
 
+  it('re-register test route', () => {
+    stub.addRoute('test', '/test-nohandler');
+  });
+
+  it('call handler', () => {
+    return request(stubUrl + '/test-nohandler')
+      .then((retval) => {
+        log.debug({retval: retval, stub: stub.routes}, 'look correct? (reregister)');
+        JSON.parse(retval).should.have.property('name', 'rest stub route:test');
+        var testObj = stub.routes.test;
+        testObj.should.be.an('array').of.length(3);
+        testObj[2].should.have.property('method', 'GET');
+        testObj[2].params.should.be.empty;
+        testObj[2].query.should.be.empty;
+        testObj[2].body.should.be.empty;
+      });
+  });
+
   it('stop a stub', () => {
     log.info({url: stubUrl}, 'stubUrl');
     log.debug({stub: stub}, 'look correct?');
     return stub.stop();
+  });
+
+  it('cause stub start error', () => {
+    var stubErr = new Stub(log);
+    return stubErr.start(1)
+      .then((data) => {
+        log.info({data: data}, 'stubErr started');
+      })
+      .should.eventually.be.rejected;
   });
 });
