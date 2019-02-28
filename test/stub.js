@@ -181,7 +181,7 @@ describe('Stub', () => {
 
   it('cause stub start error', () => {
     var stubErr = new Stub(log);
-    return stubErr.start(1)
+    return stubErr.start(-1)
       .then((data) => {
         log.info({data: data}, 'stubErr started');
       })

@@ -19,16 +19,16 @@
     "express": "^4.12.4",
     "express-bunyan-logger": "^1.1.1",
     "http": "0.0.0",
-    "lodash": "^3.9.3",
-    "svp-portfinder": "git+ssh://git@github.com/stonevalleypartners/svp-portfinder.git"
+    "lodash": "^4.17.11",
+    "svp-portfinder": "git+https://github.com/stonevalleypartners/svp-portfinder.git"
   },
   "devDependencies": {
     "bunyan": "^1.5.1",
-    "chai": "^3.3.0",
-    "chai-as-promised": "^5.1.0",
-    "istanbul": "^0.3.22",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "istanbul": "^0.4.5",
     "jshint": "^2.8.0",
-    "mocha": "^2.3.3",
-    "request-promise": "^0.4.3"
+    "mocha": "^6.0.2",
+    "request-promise": "^4.2.4"
   }
 }
